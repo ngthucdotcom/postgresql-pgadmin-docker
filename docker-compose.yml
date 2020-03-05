@@ -1,0 +1,29 @@
+version: '3.0'
+services:
+  server:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/thucle/postgres-data:/var/lib/postgresql/data
+    environment: 
+      POSTGRES_PASSWORD: "postgres"
+    networks:
+      - postgres 
+    restart: unless-stopped
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "15774:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@domain.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+      POSTGRES_HOST: server
+    volumes:
+       - /home/thucle/pgadmin:/root/.pgadmin
+    networks:
+      - postgres 
+    restart: unless-stopped   
+networks:
+  postgres:
+    driver: bridge
